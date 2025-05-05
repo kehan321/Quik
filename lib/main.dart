@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quik/view/view.dart';
+
 void main() {
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   final lightTheme = ThemeData(
     brightness: Brightness.light,
@@ -31,4 +33,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

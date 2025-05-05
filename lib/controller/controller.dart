@@ -50,7 +50,7 @@ class UrlController extends GetxController {
           'color': Colors.black,
         },
         'Telegram': {
-          'url': 'https://t.me/username', // Replace with your Telegram username
+          'url': 'https://t.me', // Replace with your Telegram username
           'icon': HugeIcons.strokeRoundedTelegram,
           'color': Colors.blue,
         },
@@ -166,25 +166,24 @@ class UrlController extends GetxController {
     }
   }
 
-void showExitDialog(BuildContext context) {
+  void showExitDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Exit App?"),
-        content: const Text("Are you sure you want to exit the app?"),
-        actions: [
-          TextButton(
-            child: const Text("No"),
-            onPressed: () => Navigator.of(context).pop(),
+      builder:
+          (_) => AlertDialog(
+            title: const Text("Exit App?"),
+            content: const Text("Are you sure you want to exit the app?"),
+            actions: [
+              TextButton(
+                child: const Text("No"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              TextButton(child: const Text("Yes"), onPressed: () => exit(0)),
+            ],
           ),
-          TextButton(
-            child: const Text("Yes"),
-            onPressed: () => exit(0),
-          ),
-        ],
-      ),
     );
   }
+
   Future<void> launchUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -198,8 +197,4 @@ void showExitDialog(BuildContext context) {
       );
     }
   }
-
-
-
-
 }

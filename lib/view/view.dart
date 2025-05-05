@@ -18,7 +18,7 @@ class UrlLauncherScreen extends StatelessWidget {
       "wa.me",
       // "youtube.com",
       "twitter.com",
-      "telegram.org",
+      "t.me",
       "reddit.com",
       "pinterest.com",
     ];
@@ -221,31 +221,5 @@ class UrlLauncherScreen extends StatelessWidget {
         );
       }),
     );
-  }
-
-  void openInAppBrowser(BuildContext context, String url) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => WebViewPage(url: url)),
-    );
-  }
-}
-
-Future<bool> _openInAppBrowserSafely(BuildContext context, String url) async {
-  try {
-    final uri = Uri.parse(url);
-    if (!["http", "https"].contains(uri.scheme)) {
-      return false; // unsupported scheme
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => WebViewPage(url: url)),
-    );
-
-    return true;
-  } catch (e) {
-    print("In-app browser failed: $e");
-    return false;
   }
 }
