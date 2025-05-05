@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:quik/controller/controller.dart';
 import 'package:quik/view/webview.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:quik/widget/drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlLauncherScreen extends StatelessWidget {
@@ -57,86 +57,47 @@ class UrlLauncherScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.black,
-      endDrawer: Drawer(
-        backgroundColor: Colors.grey.shade900,
-        width: Get.width * 0.65,
-        child: ListView(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.grey.shade800),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.apps, color: Colors.black),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Qwik App',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.share, color: Colors.white),
-              title: Text('Share App', style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Share.share(
-                  'Check out Qwik App – a quick launcher for your favorite tools!',
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app, color: Colors.white),
-              title: Text('Exit App', style: TextStyle(color: Colors.white)),
-              onTap: () => urlController.showExitDialog(context),
-            ),
-          ],
-        ),
+      endDrawer: QwikDrawerWidget(
+        context: context,
+        urlController: urlController,
       ),
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         toolbarHeight: 80,
-        flexibleSpace: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 16.0,
+        title: Row(
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.apps, color: Colors.black, size: 18),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.white,
-                      child: Icon(Icons.apps, color: Colors.black, size: 18),
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Qwik',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            const SizedBox(width: 10),
+            const Text(
+              'Qwik',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
+              ),
             ),
-          ),
+          ],
         ),
+        actions: [
+          Builder(
+            builder:
+                (context) => IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  icon: HugeIcon(
+                    icon: HugeIcons.strokeRoundedMenuSquare,
+                    color: Colors.white,
+                  ),
+                ),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
