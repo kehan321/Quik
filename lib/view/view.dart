@@ -4,9 +4,50 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:quik/controller/controller.dart';
 import 'package:quik/view/webview.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UrlLauncherScreen extends StatelessWidget {
   final UrlController urlController = Get.put(UrlController());
+
+  Future<void> handleUrlLaunch(BuildContext context, String url) async {
+    final List<String> openInBrowser = [
+      "facebook.com",
+      "zoom.us",
+      "instagram.com",
+      "linkedin.com",
+      "wa.me",
+      // "youtube.com",
+      "twitter.com",
+      "telegram.org",
+      "reddit.com",
+      "pinterest.com",
+    ];
+
+    final uri = Uri.parse(url);
+    final shouldOpenInBrowser = openInBrowser.any(
+      (domain) => uri.host.contains(domain),
+    );
+
+    if (shouldOpenInBrowser) {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar(
+          'Launch Failed',
+          'Could not open $url',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } else {
+      // Open in WebViewPage
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => WebViewPage(url: url)),
+      );
+    }
+  }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   UrlLauncherScreen({super.key});
@@ -137,24 +178,11 @@ class UrlLauncherScreen extends StatelessWidget {
               var data = filtered[index].value;
 
               return GestureDetector(
-                // onTap:() =>
-                // urlController.launchUrl(data['url']),
-                // _openInAppBrowser(context, data['url']),
-                onTap: () async {
-                  try {
-                    bool opened = await _openInAppBrowserSafely(
-                      context,
-                      data['url'],
-                    );
-                    if (!opened) {
-                      // fallback to normal launcher
-                      await urlController.launchUrl(data['url']);
-                    }
-                  } catch (e) {
-                    // fallback on error
-                    await urlController.launchUrl(data['url']);
-                  }
-                },
+                onTap:
+                    () =>
+                    // urlController.launchUrl(data['url']),
+                    // _openInAppBrowser(context, data['url']),
+                    handleUrlLaunch(context, data['url']),
 
                 child: Container(
                   decoration: BoxDecoration(

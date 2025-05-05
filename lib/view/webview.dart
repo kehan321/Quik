@@ -14,6 +14,7 @@ class WebViewPage extends StatefulWidget {
 class _WebViewPageState extends State<WebViewPage> {
   double top = 5;
   double left = 16;
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +23,25 @@ class _WebViewPageState extends State<WebViewPage> {
         child: Stack(
           children: [
             InAppWebView(
-              initialUrlRequest: URLRequest(
-                url: WebUri(
-                  widget.url,
-                ), // Convert the string URL to WebUri here
-              ),
+              initialUrlRequest: URLRequest(url: WebUri(widget.url)),
               onWebViewCreated: (InAppWebViewController controller) {
-                // Optionally handle WebView creation here
+                // Optionally store controller
               },
-              onLoadStart: (InAppWebViewController controller, WebUri? url) {
-                print("Started loading: $url");
+              onLoadStart: (controller, url) {
+                setState(() {
+                  isLoading = true;
+                });
               },
-              onLoadStop: (InAppWebViewController controller, WebUri? url) {
-                print("Finished loading: $url");
+              onLoadStop: (controller, url) async {
+                setState(() {
+                  isLoading = false;
+                });
               },
-              onProgressChanged: (
-                InAppWebViewController controller,
-                int progress,
-              ) {
+              onProgressChanged: (controller, progress) {
                 print("Loading progress: $progress%");
               },
             ),
+            if (isLoading) const Center(child: CircularProgressIndicator()),
             // Draggable back button
             Positioned(
               top: top,
@@ -62,8 +61,7 @@ class _WebViewPageState extends State<WebViewPage> {
                     ),
                   ),
                 ),
-                childWhenDragging:
-                    Container(),
+                childWhenDragging: Container(),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
